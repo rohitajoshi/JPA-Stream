@@ -7,6 +7,7 @@ import java.util.List;
 
 import javax.servlet.http.HttpServletResponse;
 
+import com.example.demo.service.EmployeeService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,10 +32,12 @@ public class EmployeeStreamController {
 
 	private final Logger logger = LoggerFactory.getLogger(EmployeeStreamController.class);
 
+
+
 	@Autowired
-	private EmployeeRepository repository;
+    private EmployeeService employeeService;
 	
-	@Transactional(readOnly = true)
+
 	@GetMapping(value = "/employee", produces = { MediaType.APPLICATION_OCTET_STREAM_VALUE })
 	public ResponseEntity<StreamingResponseBody> getAllEmployee(HttpServletResponse response) {
 
@@ -48,19 +51,7 @@ public class EmployeeStreamController {
 	}
 
 	private void writeTo(OutputStream outputStream) {
-		try (Stream<Employee> employeeList = repository.streamAllEmployees()) {
-			try (ObjectOutputStream oos = new ObjectOutputStream(outputStream)) {
+        employeeService.doWrite(outputStream);
 
-				employeeList.forEach(emp -> {
-					try {
-						oos.write(emp.toString().getBytes());
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				});
-			}catch (IOException e) {
-				e.printStackTrace();
-			}
-		}
 	}
 }

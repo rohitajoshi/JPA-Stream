@@ -18,7 +18,7 @@ import static org.hibernate.jpa.QueryHints.HINT_FETCH_SIZE;
 @Repository
 public interface EmployeeRepository extends JpaRepository<Employee, Integer> {
 	@QueryHints(value = {
-			@QueryHint(name = HINT_FETCH_SIZE, value = "" + Integer.MIN_VALUE),
+			@QueryHint(name = HINT_FETCH_SIZE, value = "" + 100),
 			@QueryHint(name = HINT_CACHEABLE, value = "false"),
 			@QueryHint(name = READ_ONLY, value = "true")
 	})
